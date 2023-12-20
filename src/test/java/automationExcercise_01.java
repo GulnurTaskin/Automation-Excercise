@@ -1,7 +1,10 @@
+import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 
 import java.time.Duration;
 
@@ -50,17 +53,40 @@ public class automationExcercise_01 {
         //6. Enter name and email address
 
         WebElement SignUpName = driver.findElement(By.xpath("//*[@*=\"name\"]"));
-        SignUpName.sendKeys("gulnur");
-        WebElement SignUpEmail= driver.findElement(By.xpath("(//*[@*=\"email\"])[2]"));
-        SignUpEmail.sendKeys("taskin.gulnur@gmail.com");
+        // driver'in isim kutusunu bulmasi icin html kodlarini yaziyoruz
+        Actions actions = new Actions(driver); // driver'a klavye uzerinden islem yaptirmak icin actions olusturuyoruz
+        Faker faker = new Faker(); // fake hesaplar olusturmak icin faker class'dan obje olusturuyoruz
+
+        String email =faker.internet().emailAddress(); // email adresini ikinci defa istedigi icin,
+        // buraya bi tane olusturup string olarak kaydediyoruz
+
+        actions.click(SignUpName) // oncelikle isim kutusuna click yapiyoruz
+                .sendKeys(faker.name().firstName()) // fake bir isim olusturmasini soyluyoruz
+                .sendKeys(Keys.TAB) // ilk isim kutusuna isim yazdiktan sonra diger kutulara gecmek icin tab tusuna basiyoruz
+                .sendKeys(email)
+                .sendKeys(Keys.TAB)
+                .perform();
+
+
 
         //7. Click 'Signup' button
 
         driver.findElement(By.xpath("(//*[@*=\"btn btn-default\"])[2]")).click();
-        Thread.sleep(3000);
 
         //8. Verify that 'ENTER ACCOUNT INFORMATION' is visible
+
+        WebElement enterAccountText = driver.findElement(By.xpath("//*[text()='Enter Account Information']"));
+        enterAccountText.isDisplayed();
+        Thread.sleep(3000);
+
         //9. Fill details: Title, Name, Email, Password, Date of birth
+
+        driver.findElement(By.xpath("(//*[@class='top'])[2]")).click();
+        driver.findElement(By.xpath("(//*[@*='name'])[2]")).submit();
+
+
+
+
         //10. Select checkbox 'Sign up for our newsletter!'
         //11. Select checkbox 'Receive special offers from our partners!'
         //12. Fill details: First name, Last name, Company, Address, Address2, Country, State, City, Zipcode, Mobile Number
@@ -72,14 +98,7 @@ public class automationExcercise_01 {
         //18. Verify that 'ACCOUNT DELETED!' is visible and click 'Continue' button
 
         driver.quit();
-        /*
-        git init
-git add .
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/GulnurTaskin/Automation-Excercise.git
-git push -u origin main
-         */
+
 
     }
 }
