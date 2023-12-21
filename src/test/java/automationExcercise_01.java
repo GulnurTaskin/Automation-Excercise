@@ -1,8 +1,5 @@
 import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -78,11 +75,16 @@ public class automationExcercise_01 {
 
         WebElement enterAccountText = driver.findElement(By.xpath("//*[text()='Enter Account Information']"));
         enterAccountText.isDisplayed();
-        Thread.sleep(3000);
+
 
         //9. Fill details: Title, Name, Email, Password, Date of birth
 
-        driver.findElement(By.xpath("(//*[@class='top'])[2]")).click();
+        WebElement selectTitle = driver.findElement(By.xpath("(//*[@class='top'])[2]"));
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        javascriptExecutor.executeScript("arguments[0].scrollIntoView();", selectTitle);
+        selectTitle.click();
+
         WebElement passWord =driver.findElement(By.xpath("(//*[@*='password'])[2]"));
 
         actions.click(passWord)
@@ -99,14 +101,17 @@ public class automationExcercise_01 {
 
         WebElement selectYear = driver.findElement(By.xpath("//*[@*='years']"));
         Select year = new Select(selectYear);
-        year.selectByVisibleText("1980"); //asagi kaydir ekle buraya
+        year.selectByVisibleText("1980");
+        //asagi kaydir ekle buraya
 
         //10. Select checkbox 'Sign up for our newsletter!'
 
         driver.findElement(By.xpath("(//*[@*='checkbox'])[2]")).click();
 
-
         //11. Select checkbox 'Receive special offers from our partners!'
+
+        driver.findElement(By.xpath("(//*[@*='optin'])[1]")).click();
+
         //12. Fill details: First name, Last name, Company, Address, Address2, Country, State, City, Zipcode, Mobile Number
         //13. Click 'Create Account button'
         //14. Verify that 'ACCOUNT CREATED!' is visible
